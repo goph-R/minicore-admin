@@ -49,7 +49,7 @@ class AdminController extends Controller {
         $this->processForm($form, $record);
         $this->view->set([
             'adminService' => $this->adminService,
-            'title' => $this->adminService->getCreateTitle(),
+            'title' => $this->adminService->getTitle('create'),
             'action' => $this->adminService->getCreateRoute(),
             'form' => $form,
             'id' => 0
@@ -68,7 +68,7 @@ class AdminController extends Controller {
         $this->processForm($form, $record);
         $this->view->set([
             'adminService' => $this->adminService,
-            'title' => $this->adminService->getEditTitle(),
+            'title' => $this->adminService->getTitle('edit'),
             'action' => $this->adminService->getEditRoute(),
             'form' => $form,
             'id' => $id

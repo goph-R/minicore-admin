@@ -29,10 +29,8 @@ abstract class AdminService {
     abstract public function createForm(Record $record);
     abstract public function save(Form $form, Record $record);
     abstract public function getRoute();
-    abstract public function getListTitle();
-    abstract public function getEditTitle();
-    abstract public function getCreateTitle();
-        
+    abstract public function getTitles();
+    
     public function __construct(Framework $framework, $adminName) {
         $this->framework = $framework;
         $this->router = $framework->get('router');
@@ -43,6 +41,12 @@ abstract class AdminService {
         $this->route = $this->getRoute();
     }
 
+    public function getTitle($for) {
+        $titles = $this->getTitles();
+        $title = isset($titles[$for]) ? $titles[$for] : '';
+        return is_array($title) ? $this->translation->get($title[0], $title[1]) : $title;
+    }
+        
     /**
      * @return Form
      */
