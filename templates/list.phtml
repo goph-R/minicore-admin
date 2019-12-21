@@ -1,0 +1,29 @@
+<?php use_layout(':admin/layout') ?>
+<?php use_script('/modules/minicore-admin/static/list.js') ?>
+<?php start_block('content') ?>
+
+<h1 class="title"><?= $adminService->getListTitle() ?></h1>
+
+<div class="level">
+    <div class="level-left">
+        <?= $this->fetch(':admin/list-filter') ?>        
+    </div>
+    <div class="level-right">        
+        <?= $this->fetch(':admin/list-page-limit') ?>        
+    </div>
+</div>
+    
+<?php if ($records): ?>
+    <div class="level">
+        <div class="level-left">
+            <?= $listView->fetchActions() ?>
+        </div>
+    </div>     
+    <?= $pager->fetch() ?>
+    <?= $listView->fetch($records) ?>
+    <?= $pager->fetch() ?>    
+<?php else: ?>
+    <?= $this->fetch(':admin/list-no-results') ?>  
+<?php endif ?>
+
+<?php end_block() ?>

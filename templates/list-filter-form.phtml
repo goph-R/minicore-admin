@@ -1,0 +1,8 @@
+<?= $this->fetch(':form/errors', ['form' => $form]) ?>
+<input type="hidden" name="sent" value="1">
+<?php if (!$router->usingRewrite()): ?>
+    <input type="hidden" name="<?= $router->getParameter() ?>" value="<?= esc($route) ?>">
+<?php endif ?>
+<?php foreach ($form->getInputs() as $input): ?>
+    <?= $this->fetch(':form/row', ['input' => $input]) ?>
+<?php endforeach ?>

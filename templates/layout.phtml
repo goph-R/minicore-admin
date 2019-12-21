@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base href="<?= route_url() ?>">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php use_translation('app') ?>
+<?php use_css('/modules/minicore-admin/static/admin.css') ?>
+<?= fetch_styles() ?>
+</head>
+<body>
+
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="container">
+        
+        <!-- logo -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="<?= route_url() ?>"></a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar_menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbar_menu" class="navbar-menu">
+
+            <!-- projects menu -->
+            <div class="navbar-start">
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link"><?= t('projects') ?></a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">Cool Fox</a>
+                        <a class="navbar-item">Gears</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+
+                <!-- notifications icon -->
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-dark">
+                            <span class="icon"><i class="fas fa-bell"></i></span>
+                            <span class="icon-number">99</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- user menu -->
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        <span class="icon"><i class="fas fa-user"></i></span>
+                        <?= $userService->getCurrentUser()->getName() ?>
+                    </a>
+                    <div class="navbar-dropdown is-right">
+                        <a class="navbar-item" href="<?= route_url('settings') ?>"><?= text('user', 'settings') ?></a>
+                        <a id="logout_link" class="navbar-item" href="<?= route_url('logout') ?>"><?= text('user', 'logout') ?></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
+    
+<div class="container admin-container">
+    <div class="columns">
+    
+        <!-- admin menu -->
+        <div class="column is-2 admin-menu">
+            <aside class="menu">
+                <p class="menu-label"><?= t('general') ?></p>
+                <ul class="menu-list">
+                    <li><a href="<?= route_url('home') ?>">Dashboard</a></li>
+                </ul>
+                <p class="menu-label"><?= t('administration') ?></p>
+                <ul class="menu-list">
+                    <li><a href="<?= route_url('user-admin') ?>">Users</a></li>
+                    <li><a href="<?= route_url('projects') ?>">Projects</a></li>
+                    <li><a href="<?= route_url('ideas') ?>">Ideas</a></li>
+                    <li><a href="<?= route_url('tasks') ?>">Tasks</a></li>
+                </ul>
+                <p class="menu-label"><?= t('documentation') ?></p>
+                <ul class="menu-list">
+                    <li><a href="<?= route_url('documentation/general') ?>"><?= t('general') ?></a></li>
+                    <li><a href="<?= route_url('documentation/project') ?>">Project</a></li>
+                </ul>
+            </aside>    
+        </div>
+
+        <!-- content -->
+        <div class="column is-10">
+            <?= fetch_block('content') ?>
+        </div>
+
+    </div>
+</div>
+    
+<?= fetch_scripts() ?>
+<script>
+
+// logout confirmation
+(function() {
+    var el = document.getElementById('logout_link');
+    el.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (confirm('<?= text('admin', 'confirm_logout') ?>')) {
+            window.location.href = el.getAttribute('href');
+        }
+    });
+})();
+
+</script>
+</body>
+</html>

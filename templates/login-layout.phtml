@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base href="<?= route_url() ?>">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?= fetch_styles() ?>
+</head>
+<body>
+<section class="hero">
+    <div class="hero-body">
+        <div class="columns is-centered">
+            <div class="column is-half">        
+                <?= fetch_block('content') ?>
+                <?= fetch_scripts() ?>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

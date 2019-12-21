@@ -1,0 +1,17 @@
+<?php use_layout(':admin/layout') ?>
+<?php start_block('content') ?>
+
+<h1 class="title"><?= $title ?></h1>
+
+<div class="level">
+    <div class="level-left"></div>
+    <div class="level-right">
+        <?= $this->fetch(':admin/form-action-back') ?>
+    </div>
+</div>
+
+<form action="<?= route_url($action, ['id' => $id]) ?>" method="POST">    
+    <?= $form->fetch() ?>
+</form>
+
+<?php end_block() ?>
