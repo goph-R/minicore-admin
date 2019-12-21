@@ -20,7 +20,7 @@
         </div>
     </div>     
     <?= $pager->fetch() ?>
-    <?= $listView->fetch($records) ?>
+    <?= $listView->fetchTable($records) ?>
     <?= $pager->fetch() ?>    
 <?php else: ?>
     <?= $this->fetch(':admin/list-no-results') ?>  

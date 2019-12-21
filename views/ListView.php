@@ -41,12 +41,12 @@ class ListView {
         return $result;
     }
     
-    public function fetch($records, $params = []) {
+    public function fetchTable($records, $params = []) {
         $mergedParams = array_merge($params, [
             'records' => $records,
             'listView' => $this
         ]);
-        return $this->view->fetch(':admin/list-view', $mergedParams);
+        return $this->view->fetch(':admin/list-table', $mergedParams);
     }
     
     public function fetchHeaders() {
@@ -84,18 +84,27 @@ class ListView {
         }
         $params = ['order_by' => $name, 'order_dir' => $orderDir];
         $label = is_array($column['label']) ? text($column['label'][0], $column['label'][1]) : $column['label'];
-        return '<th><a href="'.route_url($this->route, $params).'" class="table-header">'.$label.$icon.'</a></th>'."\n";         
+        $align = $this->getAlignStyle($column);
+        $result = '<th'.$align.'>';
+        $result .= '<a href="'.route_url($this->route, $params).'" class="table-header">';
+        $result .= $label.$icon.'</a></th>'."\n";
+        return $result;
     }
     
     protected function fetchCell(Record $record, $name, $column) {
         $result = '';
         $params = [$record, $name];
         $viewMethod = isset($column['view']) ? $column['view'] : 'text';
+        $align = $this->getAlignStyle($column);
         if (method_exists($this->cellView, $viewMethod)) {
-            $result = '<td>'.call_user_func_array([$this->cellView, $viewMethod], $params).'</td>'."\n";
+            $result = '<td'.$align.'>';
+            $result .= call_user_func_array([$this->cellView, $viewMethod], $params);
+            $result .= '</td>'."\n";
         }
         return $result;
     }
     
-    
+    protected function getAlignStyle($column) {
+        return isset($column['align']) ? ' style="text-align: '.$column['align'].'"' : '';
+    }
 }

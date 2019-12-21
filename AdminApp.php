@@ -15,6 +15,7 @@ class AdminApp extends App {
         parent::init();        
         $this->translation->add('admin', 'modules/minicore-admin/translations');
         $this->view->addFolder(':admin', 'modules/minicore-admin/templates');
+        $this->view->changePath(':app/layout', ':admin/layout');
         $this->view->changePath(':pager/pager', ':admin/pager');
         $this->view->changePath(':user/login', ':admin/user/login');
         $this->view->changePath(':user/forgot', ':admin/user/forgot');
