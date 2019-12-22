@@ -34,14 +34,14 @@ abstract class Admin {
         $this->sqlParams = array_merge($this->sqlParams, $params);
     }
     
-    public function getSelect($fields='*') {        
+    public function getSelect($fields='*', array $filter=[]) {        
         $query = "SELECT $fields FROM {$this->tableName}";
         return $query;
     }
     
     public function findAll(array $filter) {
         $this->clearSqlParams();
-        $query = $this->getSelect();
+        $query = $this->getSelect('*', $filter);
         $query .= $this->getWhere($filter);
         $query .= $this->getOrder($filter);
         $query .= $this->getLimit($filter);
@@ -50,7 +50,7 @@ abstract class Admin {
 
     public function findAllCount(array $filter) {
         $this->clearSqlParams();
-        $query = $this->getSelect('COUNT(1)');
+        $query = $this->getSelect('COUNT(1)', $filter);
         $query .= $this->getWhere($filter);
         return $this->db->fetchColumn($query, $this->sqlParams);        
     }

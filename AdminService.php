@@ -217,7 +217,6 @@ abstract class AdminService {
     public function setListSuccessMessage($message) {
         $this->userSession->setFlash('list_success_message', $this->getText($message));
     }
-
-    
+   
 }
 

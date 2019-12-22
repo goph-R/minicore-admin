@@ -26,3 +26,11 @@ nav.navbar {
 .admin-menu {
     /*border-right: 1px solid #eee;*/
 }
+
+
+#filter_form .checkbox-group-row {
+    display: inline;
+}
+#filter_form .checkbox-group-row label {
+    padding: 0 1.5rem 0 0.3rem;
+}

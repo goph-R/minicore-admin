@@ -4,6 +4,9 @@
             <div class="level-left">
                 <?= $listView->fetchActions() ?>
             </div>
+            <div class="level-right">        
+                <?= $this->fetch(':admin/list-page-limit') ?>        
+            </div>            
         </div>
     <?php endif ?>
     <?= $pager->fetch() ?>
