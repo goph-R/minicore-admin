@@ -7,10 +7,17 @@ abstract class Admin {
     protected $tableName = '';
     protected $sqlParams = [];
     
+    /** @var Database */
+    protected $db;
+    
     /** @var Record */
     protected $record;
     
+    /** @var Translation */
+    protected $translation;
+    
     public function __construct(Framework $framework) {
+        $this->translation = $framework->get('translation');
         $this->db = $framework->get($this->dbInstanceName);
         $this->record = $framework->create([$this->recordClass, $this->dbInstanceName]);
     }
@@ -19,36 +26,54 @@ abstract class Admin {
         return $this->record;
     }
     
+    protected function clearSqlParams() {
+        $this->sqlParams = [];
+    }
+    
     protected function addSqlParams(array $params) {
         $this->sqlParams = array_merge($this->sqlParams, $params);
     }
     
-    public function findAllCount(array $filter) {
-        $this->sqlParams = [];
-        $query = "SELECT COUNT(1) FROM {$this->tableName}";
-        $query .= $this->addSqlWhere($filter);
-        return $this->db->fetchColumn($query, $this->sqlParams);        
+    public function getSelect($fields='*') {        
+        $query = "SELECT $fields FROM {$this->tableName}";
+        return $query;
+    }
+    
+    public function findAll(array $filter) {
+        $this->clearSqlParams();
+        $query = $this->getSelect();
+        $query .= $this->getWhere($filter);
+        $query .= $this->getOrder($filter);
+        $query .= $this->getLimit($filter);
+        return $this->db->fetchAll($this->recordClass, $query, $this->sqlParams);
     }
 
-    public function findAll(array $filter) {
-        $this->sqlParams = [];
-        $query = "SELECT * FROM {$this->tableName}";
-        $query .= $this->addSqlWhere($filter);
-        $query .= $this->addSqlOrder($filter);
-        $query .= $this->addSqlLimit($filter);
-        return $this->db->fetchAll($this->recordClass, $query, $this->sqlParams);
+    public function findAllCount(array $filter) {
+        $this->clearSqlParams();
+        $query = $this->getSelect('COUNT(1)');
+        $query .= $this->getWhere($filter);
+        return $this->db->fetchColumn($query, $this->sqlParams);        
     }
     
     public function findById($id) {
-        $query = "SELECT * FROM {$this->tableName} WHERE id = :id LIMIT 1";
-        return $this->db->fetch($this->recordClass, $query, ['id' => $id]);
+        $this->clearSqlParams();
+        $query = $this->getSelect();
+        $query .= " WHERE id = :id LIMIT 1";
+        $this->addSqlParams(['id' => $id]);
+        return $this->db->fetch($this->recordClass, $query, $this->sqlParams);
+    }
+    
+    public function deleteByIds($ids) {
+        $in = $this->db->getInConditionAndParams($ids);
+        $query = "DELETE FROM {$this->tableName} WHERE id IN (".$in['condition'].") LIMIT ".count($in['condition']);
+        $this->db->query($query, $in['params']);
     }
 
-    protected function addSqlWhere(array $filter) {
+    protected function getWhere(array $filter) {
         return '';
     }
     
-    protected function addSqlOrder(array $filter) {
+    protected function getOrder(array $filter) {
         if (!isset($filter['order_by']) || !isset($filter['order_dir'])) {
             return '';
         }
@@ -60,7 +85,7 @@ abstract class Admin {
         return ' ORDER BY '.$column.' '.$direction;
     }
     
-    protected function addSqlLimit(array $filter) {
+    protected function getLimit(array $filter) {
         if (!isset($filter['page']) || !isset($filter['page_limit'])) {
             return '';
         }

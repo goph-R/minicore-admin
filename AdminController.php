@@ -17,7 +17,8 @@ class AdminController extends Controller {
     }
     
     public function index() {
-        $this->userService->requireLogin(); // TODO: require admin right        
+        $permissions = $this->adminService->getPermissionsFor(AdminService::LIST);
+        $this->userService->requirePermission($permissions);
         /** @var Form $filterForm */
         $filterForm = $this->adminService->createFilterForm();
         $filter = $this->adminService->createFilter($filterForm);
@@ -37,19 +38,29 @@ class AdminController extends Controller {
     }
     
     public function delete() {
-        $this->userService->requireLogin(); // TODO: require admin right        
-        $this->adminService->deleteByIds($this->request->get('ids'));
+        $permissions = $this->adminService->getPermissionsFor(AdminService::DELETE);
+        $this->userService->requirePermission($permissions);
+        $idsString = $this->request->get('ids');
+        if (!$idsString) {
+            $this->redirectToList();
+        }
+        $ids = explode(',', $idsString);
+        if (!$ids) {
+            $this->redirectToList();
+        }
+        $this->adminService->deleteByIds($ids);
         $this->redirectToList();
     }
     
     public function create() {
-        $this->userService->requireLogin(); // TODO: require admin right        
+        $permissions = $this->adminService->getPermissionsFor(AdminService::CREATE);
+        $this->userService->requirePermission($permissions);
         $record = $this->adminService->getEmptyRecord();
         $form = $this->adminService->createForm($record);
         $this->processForm($form, $record);
         $this->view->set([
             'adminService' => $this->adminService,
-            'title' => $this->adminService->getTitle('create'),
+            'title' => $this->adminService->getTitle(AdminService::CREATE),
             'action' => $this->adminService->getCreateRoute(),
             'form' => $form,
             'id' => 0
@@ -58,7 +69,8 @@ class AdminController extends Controller {
     }
     
     public function edit() {
-        $this->userService->requireLogin(); // TODO: require admin right        
+        $permissions = $this->adminService->getPermissionsFor(AdminService::EDIT);
+        $this->userService->requirePermission($permissions);
         $id = $this->request->get('id');
         $record = $this->adminService->findById($id);
         if (!$record) {
@@ -68,7 +80,7 @@ class AdminController extends Controller {
         $this->processForm($form, $record);
         $this->view->set([
             'adminService' => $this->adminService,
-            'title' => $this->adminService->getTitle('edit'),
+            'title' => $this->adminService->getTitle(AdminService::EDIT),
             'action' => $this->adminService->getEditRoute(),
             'form' => $form,
             'id' => $id
@@ -78,7 +90,7 @@ class AdminController extends Controller {
     
     protected function processForm(Form $form, Record $record) {
         if ($form->processInput()) {
-            $this->adminService->save($form, $record);
+            $this->adminService->saveWithMessage($form, $record);
             $this->redirectToList();
         }        
     }

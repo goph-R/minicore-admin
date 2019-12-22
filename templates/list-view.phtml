@@ -1,0 +1,14 @@
+<?php if ($records): ?>
+    <?php if ($listView->getActions()): ?>
+        <div class="level">
+            <div class="level-left">
+                <?= $listView->fetchActions() ?>
+            </div>
+        </div>
+    <?php endif ?>
+    <?= $pager->fetch() ?>
+    <?= $listView->fetchTable($records) ?>
+    <?= $pager->fetch() ?>    
+<?php else: ?>
+    <?= $this->fetch(':admin/list-no-results') ?>  
+<?php endif ?>

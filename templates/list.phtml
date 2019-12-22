@@ -2,7 +2,9 @@
 <?php use_script('/modules/minicore-admin/static/list.js') ?>
 <?php start_block('content') ?>
 
-<h1 class="title"><?= $adminService->getTitle('list') ?></h1>
+<h1 class="title"><?= $adminService->getTitle(AdminService::LIST) ?></h1>
+
+<?= $this->fetch(':admin/list-message') ?>
 
 <div class="level">
     <div class="level-left">
@@ -13,17 +15,6 @@
     </div>
 </div>
     
-<?php if ($records): ?>
-    <div class="level">
-        <div class="level-left">
-            <?= $listView->fetchActions() ?>
-        </div>
-    </div>     
-    <?= $pager->fetch() ?>
-    <?= $listView->fetchTable($records) ?>
-    <?= $pager->fetch() ?>    
-<?php else: ?>
-    <?= $this->fetch(':admin/list-no-results') ?>  
-<?php endif ?>
+<?= $this->fetch(':admin/list-view') ?>
 
 <?php end_block() ?>

@@ -14,4 +14,8 @@ class ListCellView {
         return $value ? '<span class="icon"><i class="fas fa-check"></i></span>' : '';
     }
     
+    public function textArray(Record $record, $name) {
+        return join(', ', $record->get($name));
+    }
+    
 }

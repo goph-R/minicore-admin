@@ -77,15 +77,8 @@
                 </ul>
                 <p class="menu-label"><?= t('administration') ?></p>
                 <ul class="menu-list">
-                    <li><a href="<?= route_url('user-admin') ?>">Users</a></li>
-                    <li><a href="<?= route_url('projects') ?>">Projects</a></li>
-                    <li><a href="<?= route_url('ideas') ?>">Ideas</a></li>
-                    <li><a href="<?= route_url('tasks') ?>">Tasks</a></li>
-                </ul>
-                <p class="menu-label"><?= t('documentation') ?></p>
-                <ul class="menu-list">
-                    <li><a href="<?= route_url('documentation/general') ?>"><?= t('general') ?></a></li>
-                    <li><a href="<?= route_url('documentation/project') ?>">Project</a></li>
+                    <li><a href="<?= route_url('user-admin') ?>"><?= text('user-admin', 'users') ?></a></li>
+                    <li><a href="<?= route_url('user-admin/role') ?>"><?= text('user-admin', 'roles') ?></a></li>
                 </ul>
             </aside>    
         </div>

@@ -1,0 +1,12 @@
+<?php if ($userSession->hasFlash('list_error_message')): ?>
+<div class="notification is-danger">
+    <button class="delete"></button>
+    <?= $userSession->getFlash('list_error_message') ?>
+</div>
+<?php endif ?>
+<?php if ($userSession->hasFlash('list_success_message')): ?>
+<div class="notification is-success">
+    <button class="delete"></button>
+    <?= $userSession->getFlash('list_success_message') ?>
+</div>
+<?php endif ?>

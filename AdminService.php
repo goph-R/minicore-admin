@@ -2,9 +2,10 @@
 
 abstract class AdminService {
     
-    const TITLE_LIST = 'list';
-    const TITLE_CREATE = 'create';
-    const TITLE_EDIT = 'edit';
+    const LIST = 'list';
+    const CREATE = 'create';
+    const EDIT = 'edit';
+    const DELETE = 'delete';
     
     /** @var Framework */
     protected $framework;
@@ -20,6 +21,9 @@ abstract class AdminService {
 
     /** @var UserSession */
     protected $userSession;
+    
+    /** @var UserService */
+    protected $userService;
     
     /** @var Admin */
     protected $admin;
@@ -37,16 +41,48 @@ abstract class AdminService {
         $this->translation = $framework->get('translation');
         $this->request = $framework->get('request');
         $this->userSession = $framework->get('userSession');
+        $this->userService = $framework->get('userService');
         $this->admin = $framework->get($adminName);
         $this->route = $this->getRoute();
+    }
+    
+    public function getAllPermissions() {
+        return [
+            self::LIST   => [AdminPermissions::ADMINISTRATOR],
+            self::EDIT   => [AdminPermissions::ADMINISTRATOR],
+            self::CREATE => [AdminPermissions::ADMINISTRATOR],
+            self::DELETE => [AdminPermissions::ADMINISTRATOR],
+        ];
+    }
+    
+    public function getPermissionsFor($for) {
+        $allPermissions = $this->getAllPermissions();
+        return isset($allPermissions[$for]) ? $allPermissions[$for] : [];
     }
 
     public function getTitle($for) {
         $titles = $this->getTitles();
         $title = isset($titles[$for]) ? $titles[$for] : '';
-        return is_array($title) ? $this->translation->get($title[0], $title[1]) : $title;
+        return $this->getText($title);
     }
-        
+
+    public function getText($text) {
+        $result = is_array($text) ? $this->translation->get($text[0], $text[1]) : $text;
+        return $result;
+    }    
+    
+    public function saveWithMessage(Form $form, Record $record) {
+        $isNew = $record->isNew();
+        if (!$this->save($form, $record)) {
+            return;
+        }
+        if ($isNew) {
+            $this->setListSuccessMessage(['admin', 'create_was_successful']);
+        } else {
+            $this->setListSuccessMessage(['admin', 'modify_was_successful']);
+        }
+    }
+
     /**
      * @return Form
      */
@@ -76,13 +112,21 @@ abstract class AdminService {
     
     public function createListView(array $filter) {
         $listView = $this->framework->create(['ListView', $this->getListRoute(), $filter]);
-        $listView->setActions([
-            ':admin/list-action-delete',
-            ':admin/list-action-create'
-        ]);
-        $listView->setItemActions([
-            ':admin/list-item-action-modify'            
-        ]);
+        $actions = [];
+        $currentUser = $this->userService->getCurrentUser();        
+        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::DELETE))) {
+            $actions[] = ':admin/list-action-delete';
+            $listView->setCheckboxes(true);
+        }
+        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::CREATE))) {
+            $actions[] = ':admin/list-action-create';
+        }
+        $listView->setActions($actions);
+        $itemActions = [];
+        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::EDIT))) {
+            $itemActions[] = ':admin/list-item-action-modify';
+        }        
+        $listView->setItemActions($itemActions);
         return $listView;
     }
     
@@ -162,8 +206,18 @@ abstract class AdminService {
     }
 
     public function deleteByIds(array $ids) {
-        $this->adminService->deleteById($ids);
-    } 
+        $this->admin->deleteByIds($ids);
+        $this->setListSuccessMessage(['admin', 'delete_was_successful']);
+    }
+    
+    public function setListErrorMessage($message) {
+        $this->userSession->setFlash('list_error_message', $this->getText($message));
+    }
+    
+    public function setListSuccessMessage($message) {
+        $this->userSession->setFlash('list_success_message', $this->getText($message));
+    }
+
     
 }
 

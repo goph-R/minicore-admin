@@ -1,18 +1,28 @@
 <div class="table-container">
     <table class="table is-striped is-fullwidth">
         <thead>
-            <th><input type="checkbox" id="list_checkbox"></th>
-            <?= $listView->fetchHeaders() ?>
-            <th></th>
+            <tr>
+                <?php if ($listView->hasCheckboxes()): ?>
+                    <th><input type="checkbox" id="list_checkbox"></th>
+                <?php endif ?>
+                <?= $listView->fetchHeaders() ?>
+                <?php if ($listView->getItemActions()): ?>
+                    <th></th>
+                <?php endif ?>
+            </tr>
         </thead>
         <tbody>            
             <?php foreach ($records as $record):  ?>
                 <tr>
-                    <td><input class="list-id-checkbox" type="checkbox" name="id[]" value="<?= $record->get('id') ?>"></td>
+                    <?php if ($listView->hasCheckboxes()): ?>
+                        <td><input class="list-id-checkbox" type="checkbox" value="<?= $record->get('id') ?>"></td>
+                    <?php endif ?>
                     <?= $listView->fetchRecord($record) ?>
-                    <td style="text-align: right">
-                        <?= $listView->fetchItemActions($record) ?>
-                    </td>
+                    <?php if ($listView->getItemActions()): ?>
+                        <td style="text-align: right">
+                            <?= $listView->fetchItemActions($record) ?>
+                        </td>
+                    <?php endif ?>
                 </tr>
             <?php endforeach ?>
         </tbody>
