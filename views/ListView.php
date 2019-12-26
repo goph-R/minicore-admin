@@ -18,9 +18,12 @@ class ListView {
     
     public function __construct(Framework $framework, $route, array $filter) {
         $this->view = $framework->get('view');
-        $this->cellView = $framework->get('listCellView');
         $this->route = $route;
         $this->filter = $filter;
+    }
+    
+    public function setCellView(ListCellView $cellView) {
+        $this->cellView = $cellView;
     }
     
     public function hasCheckboxes() {
@@ -110,24 +113,24 @@ class ListView {
     }
     
     protected function fetchOrderIcon($name) {
-        // set icon and orderDir
         $icon = '';
         $this->orderDir = 'asc';
-        if ($this->filter['order_by'] == $name) {
-            $this->orderDir = $this->filter['order_dir'] == 'asc' ? 'desc' : 'asc';
-            $icon = '<span class="icon"><i class="fas fa-caret-';
-            $icon .= $this->filter['order_dir'] == 'asc' ? 'up' : 'down';
-            $icon .= '"></i></span>';
+        if ($this->filter['order_by'] != $name) {
+            return $icon;
         }
+        $this->orderDir = $this->filter['order_dir'] == 'asc' ? 'desc' : 'asc';
+        $icon .= '<span class="icon"><i class="fas fa-caret-';
+        $icon .= $this->filter['order_dir'] == 'asc' ? 'up' : 'down';
+        $icon .= '"></i></span>';
         return $icon;
     }
     
     protected function fetchHeaderLinkBegin($name, $column) {
-        $result = '';
-        if (!isset($column['disabled'])) {
-            $params = ['order_by' => $name, 'order_dir' => $this->orderDir];
-            $result = '<a href="'.route_url($this->route, $params).'" class="table-header">';            
+        if (isset($column['disabled'])) {
+            return;
         }
+        $params = ['order_by' => $name, 'order_dir' => $this->orderDir];
+        $result = '<a href="'.route_url($this->route, $params).'" class="table-header">';            
         return $result;
     }
     
@@ -141,29 +144,31 @@ class ListView {
     
     protected function fetchCell(Record $record, $name, $column) {
         $result = '';
-        $params = [$record, $name];
         $viewMethod = isset($column['view']) ? $column['view'] : 'text';
-        $style = $this->fetchStyle($column);
-        if (method_exists($this->cellView, $viewMethod)) {
-            $result = '<td'.$style.'>';
-            $result .= call_user_func_array([$this->cellView, $viewMethod], $params);
-            $result .= '</td>'."\n";
+        if (!method_exists($this->cellView, $viewMethod)) {
+            return $result;
         }
+        $params = [$record, $name];
+        $style = $this->fetchStyle($column);
+        $result = '<td'.$style.'>';
+        $result .= call_user_func_array([$this->cellView, $viewMethod], $params);
+        $result .= '</td>'."\n";
         return $result;
     }
     
     protected function fetchStyle($column) {
         $result = '';
-        if (isset($column['align']) || isset($column['width'])) {
-            $result .= ' style="';
-            if (isset($column['align'])) {
-                $result .= 'text-align: '.$column['align'].';';
-            }
-            if (isset($column['width'])) {
-                $result .= 'width: '.$column['width'].';';                
-            }
-            $result .= '"';
+        if (!isset($column['align']) && !isset($column['width'])) {
+            return $result;
         }
+        $result .= ' style="';
+        if (isset($column['align'])) {
+            $result .= 'text-align: '.$column['align'].';';
+        }
+        if (isset($column['width'])) {
+            $result .= 'width: '.$column['width'].';';                
+        }
+        $result .= '"';
         return $result;
     }
 }

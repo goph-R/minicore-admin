@@ -1,14 +1,15 @@
-<?php if ($records): ?>
-    <?php if ($listView->getActions()): ?>
-        <div class="level">
-            <div class="level-left">
-                <?= $listView->fetchActions() ?>
-            </div>
-            <div class="level-right">        
-                <?= $this->fetch(':admin/list-page-limit') ?>        
-            </div>            
+<?php if ($listView->getActions()): ?>
+    <div class="level">
+        <div class="level-left">
+            <?= $listView->fetchActions() ?>
         </div>
-    <?php endif ?>
+        <div class="level-right">        
+            <?= $this->fetch(':admin/list-page-limit') ?>        
+        </div>            
+    </div>
+<?php endif ?>
+
+<?php if ($records): ?>
     <?= $pager->fetch() ?>
     <?= $listView->fetchTable($records) ?>
     <?= $pager->fetch() ?>    

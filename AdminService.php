@@ -46,16 +46,17 @@ abstract class AdminService {
         $this->route = $this->getRoute();
     }
     
+    // In default everything uses admin rights.
     public function getAllPermissions() {
         return [
-            self::LIST   => [AdminPermissions::ADMINISTRATOR],
-            self::EDIT   => [AdminPermissions::ADMINISTRATOR],
-            self::CREATE => [AdminPermissions::ADMINISTRATOR],
-            self::DELETE => [AdminPermissions::ADMINISTRATOR],
+            self::LIST   => [],
+            self::EDIT   => [],
+            self::CREATE => [],
+            self::DELETE => [],
         ];
     }
     
-    public function getPermissionsFor($for) {
+    public function getPermissionFor($for) {
         $allPermissions = $this->getAllPermissions();
         return isset($allPermissions[$for]) ? $allPermissions[$for] : [];
     }
@@ -112,24 +113,24 @@ abstract class AdminService {
     
     public function createListView(array $filter) {
         $listView = $this->framework->create(['ListView', $this->getListRoute(), $filter]);
+        $listView->setCellView($this->framework->create('ListCellView'));
         $actions = [];
         $currentUser = $this->userService->getCurrentUser();        
-        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::DELETE))) {
+        if ($currentUser->hasPermission($this->getPermissionFor(AdminService::DELETE))) {
             $actions[] = ':admin/list-action-delete';
             $listView->setCheckboxes(true);
         }
-        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::CREATE))) {
+        if ($currentUser->hasPermission($this->getPermissionFor(AdminService::CREATE))) {
             $actions[] = ':admin/list-action-create';
         }
         $listView->setActions($actions);
         $itemActions = [];
-        if ($currentUser->hasPermission($this->getPermissionsFor(AdminService::EDIT))) {
+        if ($currentUser->hasPermission($this->getPermissionFor(AdminService::EDIT))) {
             $itemActions[] = ':admin/list-item-action-modify';
         }        
         $listView->setItemActions($itemActions);
         return $listView;
     }
-    
        
     public function getEmptyRecord() {
         return $this->admin->getEmptyRecord();

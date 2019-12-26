@@ -6,9 +6,6 @@ class AdminApp extends App {
         parent::__construct($framework, $env, $configPath);
         $this->addModule('UsersModule');
         $this->addModule('BulmaModule');
-        $this->framework->add([
-            'listCellView' => 'ListCellView'
-        ]);
     }
 
     public function init() {

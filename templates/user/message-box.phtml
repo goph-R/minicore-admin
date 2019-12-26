@@ -1,3 +1,15 @@
-<div class="<?= $type ?>-box">
+<?php
+
+use_script('/modules/minicore-admin/static/notification.js');
+
+$classes = 'notification';
+switch ($type) {
+    case 'info': $classes .= ' is-success'; break;
+    case 'error': $classes .= ' is-danger'; break;
+}
+
+?>
+<div class="<?= $classes ?>">
+    <button class="delete"></button>
     <?= $text ?>
 </div>

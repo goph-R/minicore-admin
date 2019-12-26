@@ -2,6 +2,6 @@
 
 class AdminPermissions {
     
-    const ADMINISTRATOR = 1;
+    const ADMINISTRATION = 1;
     
 }

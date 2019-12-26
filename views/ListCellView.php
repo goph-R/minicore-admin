@@ -15,7 +15,11 @@ class ListCellView {
     }
     
     public function textArray(Record $record, $name) {
-        return join(', ', $record->get($name));
+        $array = [];
+        foreach ($record->get($name) as $data) {
+            $array[] = str_replace(' ', '&nbsp;', (string)$data);
+        }
+        return join(', ', $array);
     }
     
 }

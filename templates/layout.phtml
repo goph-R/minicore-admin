@@ -75,11 +75,26 @@
                 <ul class="menu-list">
                     <li><a href="<?= route_url('home') ?>">Dashboard</a></li>
                 </ul>
-                <p class="menu-label"><?= t('administration') ?></p>
+                <?php if ($userService->getCurrentUser()->hasPermission(AdminPermissions::ADMINISTRATION)): ?>
+                    <p class="menu-label"><?= t('administration') ?></p>
+                    <ul class="menu-list">
+                        <li><a href="<?= route_url('user-admin') ?>"><?= text('user-admin', 'users') ?></a></li>
+                        <li><a href="<?= route_url('user-admin/role') ?>"><?= text('user-admin', 'roles') ?></a></li>
+                        <li><a href="<?= route_url('project-admin') ?>"><?= text('app', 'projects') ?></a></li>
+                    </ul>
+                <?php endif ?>
+                <!-- 
+                <p class="menu-label">Letöltések</p>
                 <ul class="menu-list">
-                    <li><a href="<?= route_url('user-admin') ?>"><?= text('user-admin', 'users') ?></a></li>
-                    <li><a href="<?= route_url('user-admin/role') ?>"><?= text('user-admin', 'roles') ?></a></li>
+                    <li><a href="">Alfa verziók</a></li>
+                    <li><a href="">Béta verziók</a></li>
                 </ul>
+                <p class="menu-label">Hibajegyek</p>
+                <ul class="menu-list">
+                    <li><a href="">Hibajegyek listája</a></li>
+                    <li><a href="">Hibajegy létrehozása</a></li>
+                </ul>
+                -->
             </aside>    
         </div>
 

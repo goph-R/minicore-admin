@@ -17,8 +17,8 @@ class AdminController extends Controller {
     }
     
     public function index() {
-        $permissions = $this->adminService->getPermissionsFor(AdminService::LIST);
-        $this->userService->requirePermission($permissions);
+        $permission = $this->adminService->getPermissionFor(AdminService::LIST);
+        $this->userService->requirePermission($permission);
         /** @var Form $filterForm */
         $filterForm = $this->adminService->createFilterForm();
         $filter = $this->adminService->createFilter($filterForm);
@@ -38,8 +38,8 @@ class AdminController extends Controller {
     }
     
     public function delete() {
-        $permissions = $this->adminService->getPermissionsFor(AdminService::DELETE);
-        $this->userService->requirePermission($permissions);
+        $permission = $this->adminService->getPermissionFor(AdminService::DELETE);
+        $this->userService->requirePermission($permission);
         $idsString = $this->request->get('ids');
         if (!$idsString) {
             $this->redirectToList();
@@ -53,24 +53,26 @@ class AdminController extends Controller {
     }
     
     public function create() {
-        $permissions = $this->adminService->getPermissionsFor(AdminService::CREATE);
-        $this->userService->requirePermission($permissions);
+        $permission = $this->adminService->getPermissionFor(AdminService::CREATE);
+        $this->userService->requirePermission($permission);
         $record = $this->adminService->getEmptyRecord();
         $form = $this->adminService->createForm($record);
         $this->processForm($form, $record);
         $this->view->set([
+            'translation' => $this->translation,
             'adminService' => $this->adminService,
             'title' => $this->adminService->getTitle(AdminService::CREATE),
             'action' => $this->adminService->getCreateRoute(),
             'form' => $form,
+            'record' => $record,
             'id' => 0
         ]);
         $this->render($this->createTemplate);
     }
     
     public function edit() {
-        $permissions = $this->adminService->getPermissionsFor(AdminService::EDIT);
-        $this->userService->requirePermission($permissions);
+        $permission = $this->adminService->getPermissionFor(AdminService::EDIT);
+        $this->userService->requirePermission($permission);
         $id = $this->request->get('id');
         $record = $this->adminService->findById($id);
         if (!$record) {
@@ -79,10 +81,12 @@ class AdminController extends Controller {
         $form = $this->adminService->createForm($record);
         $this->processForm($form, $record);
         $this->view->set([
+            'translation' => $this->translation,
             'adminService' => $this->adminService,
             'title' => $this->adminService->getTitle(AdminService::EDIT),
             'action' => $this->adminService->getEditRoute(),
             'form' => $form,
+            'record' => $record,
             'id' => $id
         ]);
         $this->render($this->editTemplate);   

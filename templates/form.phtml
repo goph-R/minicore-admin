@@ -3,12 +3,14 @@
 
 <h1 class="title"><?= $title ?></h1>
 
-<div class="level">
-    <div class="level-left"></div>
-    <div class="level-right">
-        <?= $this->fetch(':admin/form-action-back') ?>
-    </div>
+<div style="float: right; padding-left: 1rem;">
+    <?= $this->fetch(':admin/form-action-back') ?>
 </div>
+<?php if (!$record->hasLocalizedText()): ?>
+    <div style="clear: both; height: 1rem"></div>
+<?php endif ?>
+
+<?= $this->fetch(':admin/form-locale-tabs') ?>        
 
 <form action="<?= route_url($action, ['id' => $id]) ?>" method="POST">    
     <?= $form->fetch() ?>

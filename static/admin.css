@@ -16,8 +16,8 @@ nav.navbar {
     font-size: 0.7em;
     padding: 0em 0.2em;
     font-weight: bold;
-    margin-left: 0.3rem;
-    margin-top: -1.3rem;
+    margin-left: 0.2rem;
+    margin-top: -1.0rem;
 }
 .admin-container {
     padding-left: 0.75rem;
@@ -33,4 +33,7 @@ nav.navbar {
 }
 #filter_form .checkbox-group-row label {
     padding: 0 1.5rem 0 0.3rem;
+}
+.control .checkbox-group-row label {
+    padding: 0 1.5rem 0.5rem 0.3rem;
 }

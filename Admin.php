@@ -62,6 +62,17 @@ abstract class Admin {
         $this->addSqlParams(['id' => $id]);
         return $this->db->fetch($this->recordClass, $query, $this->sqlParams);
     }
+        
+    public function findTextById($id) {
+        $result = [];
+        $query = "SELECT * FROM {$this->tableName}_text WHERE text_id = :id";
+        $rows = $this->db->fetchAllArray($query, [':id' => $id]);
+        foreach ($rows as $row) {
+            $locale = $row['locale'];
+            $result[$locale] = $row;
+        }
+        return $result;
+    }
     
     public function deleteByIds($ids) {
         $in = $this->db->getInConditionAndParams($ids);
