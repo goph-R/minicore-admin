@@ -1,0 +1,13 @@
+<?php use_script('/modules/minicore-admin/static/form-locale-tabs.js') ?>
+<?php if ($record->hasLocalizedText()): ?>
+    <div class="tabs is-boxed"">
+        <ul>
+            <?php foreach ($translation->getAllLocales() as $locale): ?>
+            <li data-locale="<?= $locale ?>" class="tab-locale<?= $translation->getLocale() == $locale ? ' is-active' : '' ?>"><a><?= $translation->getLocaleName($locale) ?></a></li>
+            <?php endforeach ?>
+        </ul>
+    </div>
+<?php endif ?>
+<?php append_block('scripts') ?>
+<script>adjustLocalizedRows('<?= $translation->getLocale() ?>');</script>
+<?php end_block() ?>
