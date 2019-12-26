@@ -29,6 +29,8 @@ abstract class AdminService {
     protected $admin;
     
     private $route;
+    
+    protected $localizedTexts = [];
 
     abstract public function createForm(Record $record);
     abstract public function save(Form $form, Record $record);
@@ -46,19 +48,18 @@ abstract class AdminService {
         $this->route = $this->getRoute();
     }
     
-    // In default everything uses admin rights.
     public function getAllPermissions() {
         return [
-            self::LIST   => [],
-            self::EDIT   => [],
-            self::CREATE => [],
-            self::DELETE => [],
+            self::LIST   => AdminPermissions::ADMINISTRATION,
+            self::EDIT   => AdminPermissions::ADMINISTRATION,
+            self::CREATE => AdminPermissions::ADMINISTRATION,
+            self::DELETE => AdminPermissions::ADMINISTRATION,
         ];
     }
     
     public function getPermissionFor($for) {
         $allPermissions = $this->getAllPermissions();
-        return isset($allPermissions[$for]) ? $allPermissions[$for] : [];
+        return isset($allPermissions[$for]) ? $allPermissions[$for] : -1;
     }
 
     public function getTitle($for) {
