@@ -30,8 +30,9 @@
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link"><?= t('projects') ?></a>
                     <div class="navbar-dropdown">
-                        <a class="navbar-item">Cool Fox</a>
-                        <a class="navbar-item">Gears</a>
+                        <?php foreach ($userProjects as $userProject): ?>
+                            <a class="navbar-item"><?= $userProject->getTitle() ?></a>
+                        <?php endforeach ?>
                     </div>
                 </div>
             </div>
