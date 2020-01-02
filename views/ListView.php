@@ -50,6 +50,10 @@ class ListView {
         $this->itemActions = $itemActions;
     }
     
+    public function addItemAction($value) {
+        $this->itemActions[] = $value;
+    }
+    
     public function getItemActions() {
         return $this->itemActions;
     }
@@ -87,10 +91,11 @@ class ListView {
     }
     
     public function fetchItemActions(Record $record) {
-        $result = '';
-        foreach ($this->itemActions as $itemAction) {
-            $result .= $this->view->fetch($itemAction, ['record' => $record]);
+        $result = '<table><tr>';
+        foreach (array_reverse($this->itemActions) as $itemAction) {
+            $result .= '<td style="padding:0 0 0 0.4rem">'.$this->view->fetch($itemAction, ['record' => $record]).'</td>';
         }
+        $result .= '</tr></table>';
         return $result;
     }
 

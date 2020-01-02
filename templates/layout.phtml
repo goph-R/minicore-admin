@@ -4,7 +4,6 @@
 <base href="<?= route_url() ?>">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<?php use_translation('app') ?>
 <?php use_css('/modules/minicore-admin/static/admin.css') ?>
 <?= fetch_styles() ?>
 </head>
@@ -22,107 +21,30 @@
                 <span aria-hidden="true"></span>
             </a>
         </div>
-
         <div id="navbar_menu" class="navbar-menu">
-
-            <!-- projects menu -->
-            <div class="navbar-start">
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link"><?= t('projects') ?></a>
-                    <div class="navbar-dropdown">
-                        <?php foreach ($userProjects as $userProject): ?>
-                            <a class="navbar-item"><?= $userProject->getTitle() ?></a>
-                        <?php endforeach ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="navbar-end">
-
-                <!-- notifications icon -->
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-dark">
-                            <span class="icon"><i class="fas fa-bell"></i></span>
-                            <span class="icon-number">99</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- user menu -->
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        <span class="icon"><i class="fas fa-user"></i></span>
-                        <?= $userService->getCurrentUser()->getName() ?>
-                    </a>
-                    <div class="navbar-dropdown is-right">
-                        <a class="navbar-item" href="<?= route_url('settings') ?>"><?= text('user', 'settings') ?></a>
-                        <a id="logout_link" class="navbar-item" href="<?= route_url('logout') ?>"><?= text('user', 'logout') ?></a>
-                    </div>
-                </div>
-
-            </div>
+            <?= $this->fetch(':admin/navbar') ?>
         </div>
     </div>
 </nav>
     
 <div class="container admin-container">
     <div class="columns">
-    
-        <!-- admin menu -->
         <div class="column is-2 admin-menu">
             <aside class="menu">
                 <!-- 
-                <p class="menu-label"><?= t('general') ?></p>
+                <p class="menu-label">General</p>
                 <ul class="menu-list">
-                    <li><a href="<?= route_url('home') ?>">Dashboard</a></li>
+                    <li><a href="">Dashboard</a></li>
                 </ul>
                 -->
-                <?php if ($userService->getCurrentUser()->hasPermission(AdminPermissions::ADMINISTRATION)): ?>
-                    <p class="menu-label"><?= t('administration') ?></p>
-                    <ul class="menu-list">
-                        <li><a href="<?= route_url('user-admin') ?>"><?= text('user-admin', 'users') ?></a></li>
-                        <li><a href="<?= route_url('user-admin/role') ?>"><?= text('user-admin', 'roles') ?></a></li>
-                        <li><a href="<?= route_url('project-admin') ?>"><?= text('app', 'projects') ?></a></li>
-                    </ul>
-                <?php endif ?>
-                <!-- 
-                <p class="menu-label">Letöltések</p>
-                <ul class="menu-list">
-                    <li><a href="">Alfa verziók</a></li>
-                    <li><a href="">Béta verziók</a></li>
-                </ul>
-                <p class="menu-label">Hibajegyek</p>
-                <ul class="menu-list">
-                    <li><a href="">Hibajegyek listája</a></li>
-                    <li><a href="">Hibajegy létrehozása</a></li>
-                </ul>
-                -->
+                <?= $this->fetch(':admin/sidebar') ?>
             </aside>    
         </div>
-
-        <!-- content -->
         <div class="column is-10">
             <?= fetch_block('content') ?>
         </div>
-
     </div>
-</div>
-    
+</div>    
 <?= fetch_scripts() ?>
-<script>
-
-// logout confirmation
-(function() {
-    var el = document.getElementById('logout_link');
-    el.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (confirm('<?= text('admin', 'confirm_logout') ?>')) {
-            window.location.href = el.getAttribute('href');
-        }
-    });
-})();
-
-</script>
 </body>
 </html>

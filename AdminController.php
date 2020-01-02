@@ -5,7 +5,9 @@ class AdminController extends Controller {
     /** @var UserService */
     protected $userService;
     
-    protected $adminService;    
+    /** @var AdminService */
+    protected $adminService;
+    
     protected $listTemplate = ':admin/list';
     protected $createTemplate = ':admin/form';
     protected $editTemplate = ':admin/form';

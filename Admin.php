@@ -65,7 +65,7 @@ abstract class Admin {
     
     public function deleteByIds($ids) {
         $in = $this->db->getInConditionAndParams($ids);
-        $query = "DELETE FROM {$this->tableName} WHERE id IN (".$in['condition'].") LIMIT ".count($in['condition']);
+        $query = "DELETE FROM {$this->tableName} WHERE id IN (".$in['condition'].") LIMIT ".count($in['params']);
         $this->db->query($query, $in['params']);
     }
 

@@ -37,3 +37,10 @@ nav.navbar {
 .control .checkbox-group-row label {
     padding: 0 1.5rem 0.5rem 0.3rem;
 }
+
+a.button span.icon {
+    padding: 0 1.2rem 0 0.8rem;
+}
+button.button span.icon {
+    padding: 0 1.5rem 0 0.8rem;
+}

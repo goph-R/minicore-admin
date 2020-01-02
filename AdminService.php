@@ -6,6 +6,7 @@ abstract class AdminService {
     const CREATE = 'create';
     const EDIT = 'edit';
     const DELETE = 'delete';
+    const VIEW = 'view';
     
     /** @var Framework */
     protected $framework;
