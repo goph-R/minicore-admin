@@ -49,6 +49,14 @@ abstract class AdminService {
         $this->route = $this->getRoute();
     }
     
+    public function getFormTemplate() {
+        return ':admin/form';
+    }
+    
+    public function getListTemplate() {
+        return ':admin/list';
+    }
+    
     public function getAllPermissions() {
         return [
             self::LIST   => AdminPermissions::ADMINISTRATION,
@@ -118,12 +126,12 @@ abstract class AdminService {
         $listView->setCellView($this->framework->create('ListCellView'));
         $actions = [];
         $currentUser = $this->userService->getCurrentUser();        
+        if ($currentUser->hasPermission($this->getPermissionFor(AdminService::CREATE))) {
+            $actions[] = ':admin/list-action-create';
+        }
         if ($currentUser->hasPermission($this->getPermissionFor(AdminService::DELETE))) {
             $actions[] = ':admin/list-action-delete';
             $listView->setCheckboxes(true);
-        }
-        if ($currentUser->hasPermission($this->getPermissionFor(AdminService::CREATE))) {
-            $actions[] = ':admin/list-action-create';
         }
         $listView->setActions($actions);
         $itemActions = [];

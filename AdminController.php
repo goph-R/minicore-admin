@@ -8,10 +8,6 @@ class AdminController extends Controller {
     /** @var AdminService */
     protected $adminService;
     
-    protected $listTemplate = ':admin/list';
-    protected $createTemplate = ':admin/form';
-    protected $editTemplate = ':admin/form';
-    
     public function __construct(Framework $framework, $adminServiceName) {
         parent::__construct($framework);
         $this->userService = $framework->get('userService');
@@ -36,7 +32,7 @@ class AdminController extends Controller {
             'listView' => $this->adminService->createListView($filter),
             'router' => $this->router
         ]);
-        $this->render($this->listTemplate);
+        $this->render($this->adminService->getListTemplate());
     }
     
     public function delete() {
@@ -69,7 +65,7 @@ class AdminController extends Controller {
             'record' => $record,
             'id' => 0
         ]);
-        $this->render($this->createTemplate);
+        $this->render($this->adminService->getFormTemplate());
     }
     
     public function edit() {
@@ -91,7 +87,7 @@ class AdminController extends Controller {
             'record' => $record,
             'id' => $id
         ]);
-        $this->render($this->editTemplate);   
+        $this->render($this->adminService->getFormTemplate());   
     }
     
     protected function processForm(Form $form, Record $record) {

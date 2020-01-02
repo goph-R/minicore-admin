@@ -38,6 +38,10 @@ class ListView {
         $this->actions = $actions;
     }
     
+    public function addAction($action) {
+        $this->actions[] = $action;
+    }
+    
     public function getActions() {
         return $this->actions;
     }
@@ -60,7 +64,7 @@ class ListView {
     
     public function fetchActions($params = []) {
         $result = '';
-        foreach ($this->actions as $action) {
+        foreach (array_reverse($this->actions) as $action) {
             $result .= $this->view->fetch($action, $params);
         }
         return $result;
