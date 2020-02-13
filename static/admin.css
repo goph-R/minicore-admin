@@ -41,9 +41,9 @@ nav.navbar {
 table a.button span.icon {
     padding: 0 1.2rem 0 0.8rem;
 }
-.level-item button.button span.icon {
+.list-action span.icon {
     padding: 0 1.5rem 0 0.8rem;
 }
-.level-item a.button span.icon {
-    padding: 0 1.5rem 0 0.8rem;
+.admin-list-table td {
+    vertical-align: middle;
 }
