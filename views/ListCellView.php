@@ -2,7 +2,11 @@
 
 class ListCellView {
     
-    public function __construct(Framework $framework) {
+    /** @var AdminService **/
+    protected $service;
+    
+    public function __construct(Framework $framework, AdminService $service) {
+        $this->service = $service;
     }
     
     public function text(Record $record, $name) {
@@ -20,6 +24,19 @@ class ListCellView {
             $array[] = str_replace(' ', '&nbsp;', (string)$data);
         }
         return join(', ', $array);
+    }
+    
+    public function date(Record $record, $column) {
+        $time = strtotime($record->get($column));
+        $date = str_replace(' ', '&nbsp;', date('Y-m-d H:i', $time));
+        return $date;
+    }
+    
+    public function viewLink(Record $record, $column) {
+        $value = $record->get($column);
+        $viewUrl = route_url($this->service->getViewRoute(), ['id' => $record->getId()]);
+        $result = '<a href="'.$viewUrl.'">'.esc($value).'</a>';       
+        return $result;
     }
     
 }

@@ -123,7 +123,7 @@ abstract class AdminService {
     
     public function createListView(array $filter) {
         $listView = $this->framework->create(['ListView', $this->getListRoute(), $filter]);
-        $listView->setCellView($this->framework->create('ListCellView'));
+        $listView->setCellView($this->framework->create(['ListCellView', $this]));
         $actions = [];
         $currentUser = $this->userService->getCurrentUser();        
         if ($currentUser->hasPermission($this->getPermissionFor(AdminService::CREATE))) {
@@ -164,6 +164,10 @@ abstract class AdminService {
     
     public function getCreateRoute($withLocale = false) {
         return $this->getRoutePath($this->route.'/create', $withLocale);
+    }    
+    
+    public function getViewRoute($withLocale = false) {
+        return $this->getRoutePath($this->route.'/view', $withLocale);
     }    
     
     public function createFilter(Form $form) {
