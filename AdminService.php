@@ -29,8 +29,7 @@ abstract class AdminService {
     /** @var Admin */
     protected $admin;
     
-    private $route;
-    
+    protected $route;    
     protected $localizedTexts = [];
 
     abstract public function createForm(Record $record);
@@ -47,6 +46,14 @@ abstract class AdminService {
         $this->userService = $framework->get('userService');
         $this->admin = $framework->get($adminName);
         $this->route = $this->getRoute();
+    }
+    
+    public function getDefaultOrderBy() {
+        return 'id';
+    }
+    
+    public function getDefaultOrderDir() {
+        return 'desc';
     }
     
     public function getFormTemplate() {
@@ -141,6 +148,13 @@ abstract class AdminService {
         $listView->setItemActions($itemActions);
         return $listView;
     }
+    
+    public function getBackUrl($amp='&amp;') {
+        if ($this->request->get('back') == 'view') {            
+            return route_url($this->getViewRoute(), ['id' => $this->request->get('id')], $amp);
+        }
+        return route_url($this->getListRoute(), [], $amp);
+    }    
        
     public function getEmptyRecord() {
         return $this->admin->getEmptyRecord();
@@ -168,15 +182,19 @@ abstract class AdminService {
     
     public function getViewRoute($withLocale = false) {
         return $this->getRoutePath($this->route.'/view', $withLocale);
-    }    
+    }
+    
+    public function setDefaultOrderBy($value) {
+        $this->defaultOrderBy = $value;
+    }
     
     public function createFilter(Form $form) {
         if ($this->request->get('sent')) {
             $form->bind();
         }
         $filter = $form->getValues();
-        $filter['order_by'] = $this->getFilterFromRequest('order_by', 'id');
-        $filter['order_dir'] = $this->getFilterFromRequest('order_dir', 'asc') == 'asc' ? 'asc' : 'desc';
+        $filter['order_by'] = $this->getFilterFromRequest('order_by', $this->getDefaultOrderBy());
+        $filter['order_dir'] = $this->getFilterFromRequest('order_dir', $this->getDefaultOrderDir()) == 'asc' ? 'asc' : 'desc';
         $filter['page'] = $this->getFilterFromRequest('page', 0);
         $filter['page_limit'] = $this->getFilterFromRequest('page_limit', 10);
         return $filter;

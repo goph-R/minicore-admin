@@ -40,14 +40,14 @@ class AdminController extends Controller {
         $this->userService->requirePermission($permission);
         $idsString = $this->request->get('ids');
         if (!$idsString) {
-            $this->redirectToList();
+            $this->goBack();
         }
         $ids = explode(',', $idsString);
         if (!$ids) {
-            $this->redirectToList();
+            $this->goBack();
         }
         $this->adminService->deleteByIds($ids);
-        $this->redirectToList();
+        $this->goBack();
     }
     
     public function create() {
@@ -63,7 +63,8 @@ class AdminController extends Controller {
             'action' => $this->adminService->getCreateRoute(),
             'form' => $form,
             'record' => $record,
-            'id' => 0
+            'id' => 0,
+            'back' => $this->request->get('back')
         ]);
         $this->render($this->adminService->getFormTemplate());
     }
@@ -85,7 +86,8 @@ class AdminController extends Controller {
             'action' => $this->adminService->getEditRoute(),
             'form' => $form,
             'record' => $record,
-            'id' => $id
+            'id' => $id,
+            'back' => $this->request->get('back')
         ]);
         $this->render($this->adminService->getFormTemplate());   
     }
@@ -93,12 +95,12 @@ class AdminController extends Controller {
     protected function processForm(Form $form, Record $record) {
         if ($form->processInput()) {
             $this->adminService->saveWithMessage($form, $record);
-            $this->redirectToList();
+            $this->goBack();
         }        
     }
     
-    protected function redirectToList() {
-        $this->redirect($this->adminService->getListRoute());
+    protected function goBack() {
+        $this->redirect($this->adminService->getBackUrl('&'));
     }
     
 }

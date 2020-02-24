@@ -27,9 +27,7 @@ class ListCellView {
     }
     
     public function date(Record $record, $column) {
-        $time = strtotime($record->get($column));
-        $date = str_replace(' ', '&nbsp;', date('Y-m-d H:i', $time));
-        return $date;
+        return date_view($record->get($column));
     }
     
     public function viewLink(Record $record, $column) {

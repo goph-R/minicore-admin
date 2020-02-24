@@ -12,7 +12,7 @@
 
 <?= $this->fetch(':admin/form-locale-tabs') ?>        
 
-<form action="<?= route_url($action, ['id' => $id]) ?>" method="POST">    
+<form action="<?= route_url($action, ['id' => $id, 'back' => $back]) ?>" method="POST">    
     <?= $form->fetch() ?>
 </form>
 

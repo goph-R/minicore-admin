@@ -18,7 +18,7 @@ class AdminApp extends App {
         $this->view->changePath(':user/forgot', ':admin/user/forgot');
         $this->view->changePath(':user/message', ':admin/user/message');
         $this->view->changePath(':user/message-box', ':admin/user/message-box');
-        $this->view->changePath(':user/settings', ':admin/user/settings');
+        $this->view->changePath(':user/settings-messages', ':admin/user/settings-messages');
         $this->view->set([
             'userSession' => $this->framework->get('userSession'),
             'userService' => $this->framework->get('userService')
