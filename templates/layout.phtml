@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php use_css('/modules/minicore-admin/static/admin.css') ?>
+<?php use_script('/modules/minicore-admin/static/menu.js') ?>
 <?= fetch_styles() ?>
 </head>
 <body>
@@ -15,7 +16,7 @@
         <!-- logo -->
         <div class="navbar-brand">
             <a class="navbar-item" href="<?= route_url('') ?>"></a>
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar_menu">
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar_menu" id="navbar_burger">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
