@@ -8,8 +8,9 @@ class AdminController extends Controller {
     /** @var AdminService */
     protected $adminService;
     
-    public function __construct(Framework $framework, $adminServiceName) {
-        parent::__construct($framework);
+    public function __construct($adminServiceName) {
+        parent::__construct();
+        $framework = Framework::instance();
         $this->userService = $framework->get('userService');
         $this->adminService = $framework->get($adminServiceName);
     }
@@ -75,7 +76,7 @@ class AdminController extends Controller {
         $id = $this->request->get('id');
         $record = $this->adminService->findById($id);
         if (!$record) {
-            $this->framework->error(404);
+            $this->error(404);
         }
         $form = $this->adminService->createForm($record);
         $this->processForm($form, $record);

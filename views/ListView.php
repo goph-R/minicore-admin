@@ -16,7 +16,8 @@ class ListView {
     protected $orderDir;
     protected $checkboxes;
     
-    public function __construct(Framework $framework, $route, array $filter) {
+    public function __construct($route, array $filter) {
+        $framework = Framework::instance();
         $this->view = $framework->get('view');
         $this->route = $route;
         $this->filter = $filter;

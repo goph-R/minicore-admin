@@ -16,7 +16,8 @@ abstract class Admin {
     /** @var Translation */
     protected $translation;
     
-    public function __construct(Framework $framework) {
+    public function __construct() {
+        $framework = Framework::instance();
         $this->translation = $framework->get('translation');
         $this->db = $framework->get($this->dbInstanceName);
         $this->record = $framework->create([$this->recordClass, $this->dbInstanceName]);

@@ -2,14 +2,15 @@
 
 class AdminApp extends App {
 
-    public function __construct(Framework $framework, $env='dev', $configPath='config.ini.php') {
-        parent::__construct($framework, $env, $configPath);
+    public function __construct($env='dev', $configPath='config.ini.php') {
+        parent::__construct($env, $configPath);
         $this->addModule('UsersModule');
         $this->addModule('BulmaModule');
     }
 
     public function init() {
-        parent::init();        
+        parent::init();
+        $framework = Framework::instance();
         $this->translation->add('admin', 'modules/minicore-admin/translations');
         $this->view->addFolder(':admin', 'modules/minicore-admin/templates');
         $this->view->changePath(':app/layout', ':admin/layout');
@@ -20,8 +21,8 @@ class AdminApp extends App {
         $this->view->changePath(':user/message-box', ':admin/user/message-box');
         $this->view->changePath(':user/settings-messages', ':admin/user/settings-messages');
         $this->view->set([
-            'userSession' => $this->framework->get('userSession'),
-            'userService' => $this->framework->get('userService')
+            'userSession' => $framework->get('userSession'),
+            'userService' => $framework->get('userService')
         ]);
     }
 

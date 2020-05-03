@@ -8,9 +8,6 @@ abstract class AdminService {
     const DELETE = 'delete';
     const VIEW = 'view';
     
-    /** @var Framework */
-    protected $framework;
-    
     /** @var Router */
     protected $router;
     
@@ -37,8 +34,8 @@ abstract class AdminService {
     abstract public function getRoute();
     abstract public function getTitles();
     
-    public function __construct(Framework $framework, $adminName) {
-        $this->framework = $framework;
+    public function __construct($adminName) {
+        $framework = Framework::instance();        
         $this->router = $framework->get('router');
         $this->translation = $framework->get('translation');
         $this->request = $framework->get('request');
@@ -105,8 +102,9 @@ abstract class AdminService {
      * @return Form
      */
     public function createFilterForm() {
+        $framework = Framework::instance();
         /** @var Form $form */
-        $form = $this->framework->create(['Form', 'filter']);
+        $form = $framework->create(['Form', 'filter']);
         $form->setUseCsrf(false);
         /** @var TextInput $textInput */
         $textInput = $form->addInput(null, ['TextInput', 'text', $this->getFilterFromSession('text')]);
@@ -129,8 +127,9 @@ abstract class AdminService {
     }
     
     public function createListView(array $filter) {
-        $listView = $this->framework->create(['ListView', $this->getListRoute(), $filter]);
-        $listView->setCellView($this->framework->create(['ListCellView', $this]));
+        $framework = Framework::instance();
+        $listView = $framework->create(['ListView', $this->getListRoute(), $filter]);
+        $listView->setCellView($framework->create(['ListCellView', $this]));
         $actions = [];
         $currentUser = $this->userService->getCurrentUser();        
         if ($currentUser->hasPermission($this->getPermissionFor(AdminService::CREATE))) {
@@ -214,8 +213,9 @@ abstract class AdminService {
     }
     
     public function createPager(array $filter) {
+        $framework = Framework::instance();
         $count = $this->admin->findAllCount($filter);
-        $pager = $this->framework->create('Pager');
+        $pager = $framework->create('Pager');
         $page = isset($filter['page']) ? (int)$filter['page'] : 0;
         $limit = isset($filter['page_limit']) ? (int)$filter['page_limit'] : 25;
         $pager->init($page, $limit, $count, $this->route);

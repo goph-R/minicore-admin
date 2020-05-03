@@ -7,18 +7,6 @@ nav.navbar {
     padding-right: 1rem;
 }
 
-.icon-number {
-    position: absolute;
-    z-index: 100;
-    color: #fff;
-    border-radius: 1em;
-    background-color: #a00;
-    font-size: 0.7em;
-    padding: 0em 0.2em;
-    font-weight: bold;
-    margin-left: 0.2rem;
-    margin-top: -1.0rem;
-}
 .admin-container {
     padding-left: 0.75rem;
     padding-right: 0.75rem;

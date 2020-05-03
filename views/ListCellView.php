@@ -5,7 +5,7 @@ class ListCellView {
     /** @var AdminService **/
     protected $service;
     
-    public function __construct(Framework $framework, AdminService $service) {
+    public function __construct(AdminService $service) {
         $this->service = $service;
     }
     
