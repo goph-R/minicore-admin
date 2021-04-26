@@ -97,7 +97,7 @@ class ListView {
     
     public function fetchItemActions(Record $record) {
         $result = '<table><tr>';
-        foreach (array_reverse($this->itemActions) as $itemAction) {
+        foreach (/*array_reverse(*/$this->itemActions/*)*/ as $itemAction) {
             $result .= '<td style="padding:0 0 0 0.4rem">'.$this->view->fetch($itemAction, ['record' => $record]).'</td>';
         }
         $result .= '</tr></table>';

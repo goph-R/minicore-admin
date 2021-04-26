@@ -5,10 +5,10 @@
                 <?php if ($listView->hasCheckboxes()): ?>
                     <th><input type="checkbox" id="list_checkbox"></th>
                 <?php endif ?>
-                <?= $listView->fetchHeaders() ?>
                 <?php if ($listView->getItemActions()): ?>
                     <th></th>
                 <?php endif ?>
+                <?= $listView->fetchHeaders() ?>
             </tr>
         </thead>
         <tbody>            
@@ -17,12 +17,12 @@
                     <?php if ($listView->hasCheckboxes()): ?>
                         <td><input class="list-id-checkbox" type="checkbox" value="<?= $record->get('id') ?>"></td>
                     <?php endif ?>
-                    <?= $listView->fetchRecord($record) ?>
                     <?php if ($listView->getItemActions()): ?>
-                        <td style="text-align: right">
+                        <td>
                             <?= $listView->fetchItemActions($record) ?>
                         </td>
                     <?php endif ?>
+                    <?= $listView->fetchRecord($record) ?>
                 </tr>
             <?php endforeach ?>
         </tbody>
