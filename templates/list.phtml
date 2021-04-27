@@ -1,6 +1,6 @@
 <?php use_layout(':admin/layout') ?>
-<?php use_script('/modules/minicore-admin/static/list.js') ?>
-<?php use_script('/modules/minicore-admin/static/notification.js') ?>
+<?php use_module_script('minicore-admin', 'static/list.js') ?>
+<?php use_module_script('minicore-admin', 'static/notification.js') ?>
 <?php start_block('content') ?>
 
 <h1 class="title"><?= $adminService->getTitle(AdminService::LIST) ?></h1>
