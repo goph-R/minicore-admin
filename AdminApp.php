@@ -5,6 +5,7 @@ class AdminApp extends App {
     public function __construct($env='dev', $configPath='config.ini.php') {
         parent::__construct($env, $configPath);
         $this->addModule('AdminModule');
+        $this->addModule('CkEditorModule');
         $this->addModule('BulmaModule');
         $this->addModule('UsersModule');
         $this->addModule('UsersAdminModule');
